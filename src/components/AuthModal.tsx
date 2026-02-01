@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,17 +72,9 @@ const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
           rounded-2xl border border-black/5
           bg-white/80 backdrop-blur-xl
           shadow-[0_40px_80px_-20px_rgba(0,0,0,0.35)]
-          top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-          fixed
-          mx-auto my-auto
-          max-h-[85vh] overflow-y-auto
-          border-0
+          [&>button]:hidden
         "
-        // Hide ALL close buttons since your design doesn't have one
-        hideClose={true}
       >
-        {/* REMOVED the custom close button completely - design doesn't show it */}
-
         {/* Subtle wallpaper */}
         <div
           className="absolute inset-0 opacity-10"
@@ -91,6 +83,15 @@ const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
 
         {/* Content */}
         <div className="relative z-10 px-6 py-8">
+          <DialogTitle className="sr-only">
+            {isSignUp ? "Create account" : "Sign in"}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            {isSignUp
+              ? "One account. All experiences."
+              : "Welcome back."}
+          </DialogDescription>
+          
           <h2 className="text-2xl font-semibold text-gray-900 text-center">
             {isSignUp ? "Create account" : "Sign in"}
           </h2>
