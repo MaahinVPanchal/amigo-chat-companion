@@ -150,27 +150,22 @@ const PhoneMockup = () => {
                         <X className="w-4 h-4 text-white" />
                       </button>
 
+                      {/* Avatar at top */}
+                      <div className="absolute top-16 left-1/2 -translate-x-1/2 z-10">
+                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/30 shadow-lg">
+                          <img 
+                            src="/amigo-avatar.png" 
+                            alt="Amigo" 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <p className="text-white text-center text-sm font-semibold mt-2">Amigo</p>
+                      </div>
+
                       {/* Screen Content */}
                       <div className="relative w-full h-full flex flex-col items-center justify-center px-6">
-                        {/* Status text */}
-                        <div className="absolute top-14 left-0 right-0 text-center">
-                          <p className="text-white/70 text-xs font-medium tracking-wider uppercase">
-                            AI Interview
-                          </p>
-                          <p className="text-white text-lg font-semibold mt-1">
-                            Amigo
-                          </p>
-                        </div>
-
                         {/* Voice Widget */}
                         <VoiceWidget />
-
-                        {/* Bottom hint */}
-                        <div className="absolute bottom-8 left-0 right-0 text-center">
-                          <p className="text-white/70 text-xs">
-                            Tap to start your interview
-                          </p>
-                        </div>
                       </div>
                     </motion.div>
                   )}
