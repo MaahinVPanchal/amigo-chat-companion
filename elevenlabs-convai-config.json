@@ -1,0 +1,67 @@
+{
+  "type": "webhook",
+  "name": "QueryRagie",
+  "description": "Search and retrieve answers from the user's uploaded documents using Ragie AI. Use this tool whenever a user asks a question that might be answered by their uploaded resume, documents, or personal files. The tool automatically filters documents by the user's UUID. Always use this tool FIRST before providing answers to questions about the user's documents or resume.",
+  "disable_interruptions": false,
+  "force_pre_tool_speech": "auto",
+  "assignments": [],
+  "tool_call_sound": null,
+  "tool_call_sound_behavior": "auto",
+  "execution_mode": "immediate",
+  "api_schema": {
+    "url": "https://wanxzrrtvfofboowabkq.supabase.co/functions/v1/sync-ragie-knowledge-base",
+    "method": "POST",
+    "path_params_schema": [],
+    "query_params_schema": [],
+    "request_body_schema": {
+      "id": "body",
+      "type": "object",
+      "description": "The user's question and UUID for document filtering",
+      "properties": [
+        {
+          "id": "query",
+          "type": "string",
+          "value_type": "llm_prompt",
+          "description": "The user's question or query to search in their uploaded documents",
+          "dynamic_variable": "",
+          "constant_value": "",
+          "enum": null,
+          "is_system_provided": false,
+          "required": true
+        },
+        {
+          "id": "user_uuid",
+          "type": "string",
+          "value_type": "dynamic_variable",
+          "description": "The user's unique identifier for filtering their documents",
+          "dynamic_variable": "user_id",
+          "constant_value": "",
+          "enum": null,
+          "is_system_provided": false,
+          "required": true
+        }
+      ],
+      "required": true,
+      "value_type": "object"
+    },
+    "request_headers": [
+      {
+        "type": "value",
+        "name": "Authorization",
+        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indhbnh6cnJ0dmZvZmJvb3dhYmtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjAyMjEsImV4cCI6MjA4NTQ5NjIyMX0.4rz8pL_-7RrhuKkEYiMVG13xV8rvl4FtIqppCSWo5vY"
+      },
+      {
+        "type": "value",
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ],
+    "auth_connection": null
+  },
+  "response_timeout_secs": 20,
+  "dynamic_variables": {
+    "dynamic_variable_placeholders": {
+      "user_id": "fdde1558-6903-47f4-9c85-7f18cba75959"
+    }
+  }
+}

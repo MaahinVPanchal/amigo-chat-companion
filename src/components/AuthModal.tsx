@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,31 +29,28 @@ const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
           email,
           password,
         });
-        
+
         if (error) throw error;
-        
+
         toast({
           title: "Success!",
-          description: "Please check your email to confirm your account.",
+          description: "Account created successfully! You can now sign in.",
         });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
-        
+
         if (error) throw error;
-        
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully signed in.",
-        });
+
+        toast({ title: "Welcome back 👋" });
         onSuccess();
         onClose();
       }
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Authentication failed",
         description: error.message,
         variant: "destructive",
       });
@@ -63,70 +60,117 @@ const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        {/* Background with wallpaper */}
-        <div className="absolute inset-0 rounded-lg overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-            style={{ backgroundImage: 'url(/Wallpaper.png)' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-600 to-blue-500 opacity-90" />
-        </div>
-        
-        <div className="relative z-10">
-          <DialogHeader>
-            <DialogTitle className="text-white text-center text-2xl">
-              {isSignUp ? "Create Account" : "Welcome Back"}
-            </DialogTitle>
-          </DialogHeader>
-          
-          <form onSubmit={handleAuth} className="space-y-4 mt-6">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">Email</Label>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open && !loading) onClose();
+      }}
+    >
+      <DialogContent
+        className="
+          relative w-[90vw] max-w-sm p-0 overflow-hidden
+          rounded-2xl border border-black/5
+          bg-white/80 backdrop-blur-xl
+          shadow-[0_40px_80px_-20px_rgba(0,0,0,0.35)]
+          top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+          fixed
+          mx-auto my-auto
+          max-h-[85vh] overflow-y-auto
+          border-0
+        "
+        // Hide ALL close buttons since your design doesn't have one
+        hideClose={true}
+      >
+        {/* REMOVED the custom close button completely - design doesn't show it */}
+
+        {/* Subtle wallpaper */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: "url(/Wallpaper1.png)" }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 px-6 py-8">
+          <h2 className="text-2xl font-semibold text-gray-900 text-center">
+            {isSignUp ? "Create account" : "Sign in"}
+          </h2>
+
+          <p className="text-sm text-gray-500 text-center mt-1">
+            {isSignUp
+              ? "One account. All experiences."
+              : "Welcome back."}
+          </p>
+
+          <form onSubmit={handleAuth} className="mt-6 space-y-4">
+            <div className="space-y-1">
+              <Label className="text-xs text-gray-500">Email</Label>
               <Input
-                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
-                placeholder="Enter your email"
+                placeholder="name@icloud.com"
+                className="
+                  h-11 rounded-xl
+                  bg-gray-100/70
+                  border-none
+                  focus:ring-2 focus:ring-black/10
+                "
               />
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-white">Password</Label>
+
+            <div className="space-y-1">
+              <Label className="text-xs text-gray-500">Password</Label>
               <Input
-                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
-                placeholder="Enter your password"
+                placeholder="••••••••"
+                className="
+                  h-11 rounded-xl
+                  bg-gray-100/70
+                  border-none
+                  focus:ring-2 focus:ring-black/10
+                "
               />
             </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full bg-white text-purple-900 hover:bg-white/90"
+
+            <Button
+              type="submit"
               disabled={loading}
+              className="
+                w-full h-11 rounded-xl
+                bg-black text-white
+                hover:bg-black/90
+                transition
+              "
             >
-              {loading ? "Loading..." : (isSignUp ? "Sign Up" : "Sign In")}
+              {loading
+                ? "Please wait…"
+                : isSignUp
+                ? "Create account"
+                : "Continue"}
             </Button>
           </form>
-          
-          <div className="mt-4 text-center">
+
+          <div className="mt-5 text-center">
             <button
               type="button"
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-white/80 hover:text-white text-sm underline"
+              disabled={loading}
+              className="
+                text-sm text-gray-500
+                hover:text-black transition
+                disabled:opacity-50
+              "
             >
-              {isSignUp 
-                ? "Already have an account? Sign in" 
-                : "Don't have an account? Sign up"
-              }
+              {isSignUp
+                ? "Already have an account?"
+                : "Don't have an account?"}
+              <span className="ml-1 font-medium underline">
+                {isSignUp ? "Sign in" : "Create one"}
+              </span>
             </button>
           </div>
         </div>

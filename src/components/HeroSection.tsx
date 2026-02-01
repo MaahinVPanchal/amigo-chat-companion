@@ -9,29 +9,36 @@ import { useToast } from "@/hooks/use-toast";
 
 const HeroSection = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isPhoneCentered, setIsPhoneCentered] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
 
   const handleStartInterview = () => {
     if (user) {
-      // User is already authenticated, start the interview
+      // User is already authenticated, center the phone and start the interview
+      setIsPhoneCentered(true);
       toast({
         title: "Starting Interview",
         description: "Welcome to your interview practice session!",
       });
-      // Add your interview logic here
     } else {
-      // User needs to authenticate first
+      // User needs to authenticate first, but still center the phone
+      setIsPhoneCentered(true);
       setIsAuthModalOpen(true);
     }
   };
 
   const handleAuthSuccess = () => {
+    setIsAuthModalOpen(false);
     toast({
       title: "Authentication Successful",
       description: "You can now start your interview practice!",
     });
-    // Add your interview logic here
+  };
+
+  const handleBackToHome = () => {
+    setIsPhoneCentered(false);
+    setIsAuthModalOpen(false);
   };
 
   return (
@@ -41,19 +48,41 @@ const HeroSection = () => {
         <div className="absolute inset-0">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-            style={{ backgroundImage: 'url(/Wallpaper.png)' }}
+            style={{ backgroundImage: 'url(/Wallpaper1.png)' }}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-600 to-blue-500 opacity-20" />
         </div>
+
+        {/* Overlay when phone is centered */}
+        {isPhoneCentered && (
+          <motion.div
+            className="absolute inset-0 bg-black/20 backdrop-blur-sm z-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          />
+        )}
         
         <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[calc(100vh-8rem)]">
+          <motion.div 
+            className={`transition-all duration-1000 ease-in-out ${
+              isPhoneCentered 
+                ? 'flex items-center justify-center min-h-[calc(100vh-8rem)]' 
+                : 'grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[calc(100vh-8rem)]'
+            }`}
+            layout
+          >
             {/* Left Column - Text Content */}
             <motion.div 
-              className="flex flex-col justify-center"
+              className={`flex flex-col justify-center transition-all duration-1000 ${
+                isPhoneCentered ? 'opacity-0 pointer-events-none absolute' : 'opacity-100'
+              }`}
               initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              animate={{ 
+                opacity: isPhoneCentered ? 0 : 1, 
+                x: isPhoneCentered ? -100 : 0 
+              }}
+              transition={{ duration: 0.8 }}
             >
               <h1 className="text-hero text-foreground">
                 MEET
@@ -118,10 +147,40 @@ const HeroSection = () => {
             </motion.div>
 
             {/* Right Column - Phone */}
-            <div className="flex items-center justify-center lg:justify-end">
-              <PhoneMockup />
-            </div>
-          </div>
+            <motion.div 
+              className={`flex items-center justify-center transition-all duration-1000 relative ${
+                isPhoneCentered ? 'scale-110' : 'lg:justify-end scale-100'
+              }`}
+              animate={{
+                scale: isPhoneCentered ? 1.1 : 1,
+                x: isPhoneCentered ? 0 : 0
+              }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+            >
+              {/* Back Button Overlay - Only show when phone is centered */}
+              {isPhoneCentered && (
+                <motion.div
+                  className="absolute -top-20 left-1/2 -translate-x-1/2 z-50"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.5 }}
+                >
+                  <button
+                    onClick={handleBackToHome}
+                    className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white hover:bg-white/20 transition-all duration-300 flex items-center gap-2 shadow-lg"
+                  >
+                    <ArrowRight className="w-4 h-4 rotate-180" />
+                    <span className="text-sm font-medium">Back to Home</span>
+                  </button>
+                </motion.div>
+              )}
+              
+              <PhoneMockup 
+                isInterviewMode={isPhoneCentered}
+                onBackToHome={handleBackToHome}
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

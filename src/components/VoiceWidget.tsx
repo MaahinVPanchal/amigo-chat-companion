@@ -1,10 +1,34 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { motion } from "framer-motion";
 import { Mic, MicOff, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const VoiceWidget = () => {
   const [isConnecting, setIsConnecting] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Get current user ID
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+      }
+    };
+    getCurrentUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setUserId(session.user.id);
+      } else {
+        setUserId(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const conversation = useConversation({
     onConnect: () => console.log("Connected to Amigo"),
@@ -16,19 +40,28 @@ const VoiceWidget = () => {
   const bars = [0, 1, 2, 3, 4, 5, 6];
 
   const startConversation = useCallback(async () => {
+    if (!userId) {
+      console.error("No user ID available");
+      return;
+    }
+
     setIsConnecting(true);
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await conversation.startSession({
         agentId: "agent_6001kfn5vs1jem7r14ppajm8zz3j",
         connectionType: "webrtc",
+        // Pass user ID as dynamic variable
+        dynamicVariables: {
+          user_id: userId
+        }
       } as any);
     } catch (error) {
       console.error("Failed to start conversation:", error);
     } finally {
       setIsConnecting(false);
     }
-  }, [conversation]);
+  }, [conversation, userId]);
 
   const stopConversation = useCallback(async () => {
     await conversation.endSession();
