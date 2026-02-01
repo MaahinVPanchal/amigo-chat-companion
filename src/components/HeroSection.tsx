@@ -1,44 +1,35 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import PhoneMockup from "./PhoneMockup";
-import AuthModal from "./AuthModal";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const HeroSection = () => {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isPhoneCentered, setIsPhoneCentered] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
 
   const handleStartInterview = () => {
+    // Always center the phone when starting interview
+    setIsPhoneCentered(true);
+    
     if (user) {
-      // User is already authenticated, center the phone and start the interview
-      setIsPhoneCentered(true);
       toast({
         title: "Starting Interview",
         description: "Welcome to your interview practice session!",
       });
     } else {
-      // User needs to authenticate first, but still center the phone
-      setIsPhoneCentered(true);
-      setIsAuthModalOpen(true);
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in using the phone to start your interview.",
+      });
     }
-  };
-
-  const handleAuthSuccess = () => {
-    setIsAuthModalOpen(false);
-    toast({
-      title: "Authentication Successful",
-      description: "You can now start your interview practice!",
-    });
   };
 
   const handleBackToHome = () => {
     setIsPhoneCentered(false);
-    setIsAuthModalOpen(false);
   };
 
   return (
@@ -183,12 +174,6 @@ const HeroSection = () => {
           </motion.div>
         </div>
       </section>
-
-      <AuthModal 
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onSuccess={handleAuthSuccess}
-      />
     </>
   );
 };
