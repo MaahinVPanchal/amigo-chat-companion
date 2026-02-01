@@ -49,7 +49,7 @@ const VoiceWidget = () => {
         {bars.map((i) => (
           <motion.div
             key={i}
-            className="w-1.5 bg-lavender rounded-full"
+            className="w-1.5 bg-white/80 rounded-full"
             animate={isActive || conversation.isSpeaking ? {
               height: [12, 40 + Math.random() * 30, 12],
             } : {
@@ -69,7 +69,7 @@ const VoiceWidget = () => {
       </div>
 
       {/* Status */}
-      <p className="text-zinc-400 text-sm font-medium">
+      <p className="text-white/70 text-sm font-medium">
         {isConnecting 
           ? "Connecting..." 
           : isActive 
@@ -84,20 +84,20 @@ const VoiceWidget = () => {
       <motion.button
         onClick={handleToggle}
         disabled={isConnecting}
-        className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 ${
+        className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 shadow-lg ${
           isActive 
             ? "bg-red-500 hover:bg-red-600" 
-            : "bg-lavender hover:bg-lavender-glow"
+            : "bg-white/90 hover:bg-white"
         }`}
         whileTap={{ scale: 0.95 }}
         whileHover={{ scale: 1.05 }}
       >
         {isConnecting ? (
-          <Loader2 className="w-6 h-6 text-foreground animate-spin" />
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
         ) : isActive ? (
           <MicOff className="w-6 h-6 text-white" />
         ) : (
-          <Mic className="w-6 h-6 text-foreground" />
+          <Mic className="w-6 h-6 text-primary" />
         )}
       </motion.button>
     </div>
