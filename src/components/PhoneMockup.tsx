@@ -44,8 +44,15 @@ const PhoneMockup = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="relative w-full h-full"
                     >
-                      {/* Wallpaper - Purple gradient like reference */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-600 to-blue-500" />
+                      {/* Wallpaper - Space Black image */}
+                      <div 
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: "url('/SpaceBlack.png')",
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      />
                       
                       {/* Status Bar */}
                       <div className="absolute top-3 left-0 right-0 flex justify-between items-center px-8 z-10">
@@ -65,46 +72,51 @@ const PhoneMockup = () => {
 
                       {/* App Grid */}
                       <div className="absolute inset-0 pt-16 px-4 pb-20">
-                        <div className="grid grid-cols-4 gap-4 mt-8">
-                          {/* Amigo App - Main CTA */}
-                          <motion.button
-                            onClick={() => setIsAppOpen(true)}
-                            className="flex flex-col items-center gap-1"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-lavender to-purple-400 flex items-center justify-center shadow-lg">
-                              <Mic className="w-7 h-7 md:w-8 md:h-8 text-white" />
-                            </div>
-                            <span className="text-white text-[10px] font-medium">Amigo</span>
-                          </motion.button>
+                        <div className="flex justify-center mt-20">
+                          <div className="grid grid-cols-2 gap-8">
+                            {/* Amigo App - Main CTA */}
+                            <motion.button
+                              onClick={() => setIsAppOpen(true)}
+                              className="flex flex-col items-center gap-2"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.9 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            >
+                              <motion.div 
+                                className="w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-br from-lavender to-purple-400 flex items-center justify-center shadow-xl"
+                                whileHover={{ 
+                                  scale: 1.1,
+                                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                                }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                              >
+                                <Mic className="w-8 h-8 md:w-9 md:h-9 text-white" />
+                              </motion.div>
+                              <span className="text-white text-xs font-medium">Amigo</span>
+                            </motion.button>
 
-                          {/* Placeholder Apps */}
-                          {[
-                            { color: "from-blue-400 to-blue-600", icon: "📞" },
-                            { color: "from-green-400 to-green-600", icon: "💬" },
-                            { color: "from-orange-400 to-red-500", icon: "📷" },
-                            { color: "from-pink-400 to-pink-600", icon: "🎵" },
-                            { color: "from-blue-500 to-indigo-600", icon: "📧" },
-                            { color: "from-gray-600 to-gray-800", icon: "⚙️" },
-                          ].map((app, i) => (
-                            <div key={i} className="flex flex-col items-center gap-1">
-                              <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${app.color} flex items-center justify-center shadow-lg opacity-60`}>
-                                <span className="text-xl md:text-2xl">{app.icon}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Dock */}
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-2 flex justify-around">
-                          {["📱", "🌐", "📁", "🎧"].map((icon, i) => (
-                            <div key={i} className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white/10 flex items-center justify-center">
-                              <span className="text-lg md:text-xl">{icon}</span>
-                            </div>
-                          ))}
+                            {/* Weather App */}
+                            <motion.button
+                              className="flex flex-col items-center gap-2"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.9 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            >
+                              <motion.div 
+                                className="w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-xl"
+                                whileHover={{ 
+                                  scale: 1.1,
+                                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                                }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                              >
+                                <span className="text-2xl">☀️</span>
+                              </motion.div>
+                              <span className="text-white text-xs font-medium">Weather</span>
+                            </motion.button>
+                          </div>
                         </div>
                       </div>
 
@@ -118,21 +130,31 @@ const PhoneMockup = () => {
                       initial={{ opacity: 0, scale: 1.1 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="relative w-full h-full bg-black"
+                      className="relative w-full h-full overflow-hidden"
                     >
+                      {/* Solar Gradient Wallpaper */}
+                      <div 
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: "url('/SolarGradient11.png')",
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      />
+
                       {/* Close Button */}
                       <button
                         onClick={() => setIsAppOpen(false)}
-                        className="absolute top-12 right-4 z-30 w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
+                        className="absolute top-12 right-4 z-30 w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center"
                       >
-                        <X className="w-4 h-4 text-zinc-400" />
+                        <X className="w-4 h-4 text-white" />
                       </button>
 
                       {/* Screen Content */}
                       <div className="relative w-full h-full flex flex-col items-center justify-center px-6">
                         {/* Status text */}
                         <div className="absolute top-14 left-0 right-0 text-center">
-                          <p className="text-zinc-400 text-xs font-medium tracking-wider uppercase">
+                          <p className="text-white/70 text-xs font-medium tracking-wider uppercase">
                             AI Interview
                           </p>
                           <p className="text-white text-lg font-semibold mt-1">
@@ -145,7 +167,7 @@ const PhoneMockup = () => {
 
                         {/* Bottom hint */}
                         <div className="absolute bottom-8 left-0 right-0 text-center">
-                          <p className="text-zinc-500 text-xs">
+                          <p className="text-white/70 text-xs">
                             Tap to start your interview
                           </p>
                         </div>

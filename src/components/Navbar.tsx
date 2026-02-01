@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogOut, User } from "lucide-react";
 
 const Navbar = () => {
+  const { user, signOut } = useAuth();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
@@ -26,9 +30,29 @@ const Navbar = () => {
         </div>
 
         {/* CTA */}
-        <Button variant="outline" className="rounded-full px-5">
-          Download App
-        </Button>
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">{user.email}</span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="rounded-full px-4"
+                onClick={signOut}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" className="rounded-full px-5">
+              Download App
+            </Button>
+          )}
+        </div>
       </div>
     </nav>
   );
